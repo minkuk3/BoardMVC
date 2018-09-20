@@ -11,7 +11,7 @@
 <body>
 	<div class="container">
 		<jsp:include page="top.jsp" />
-		<jsp:include page="${content }.jsp" />
+		<jsp:include page="${content}.jsp" />
 		<jsp:include page="bottom.jsp" />
 	</div>
 </body>

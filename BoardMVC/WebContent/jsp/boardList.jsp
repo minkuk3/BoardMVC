@@ -20,7 +20,7 @@
 					<c:forEach var="vo" items="${data}">
 						<tr>
 							<td>${vo.bid }</td>
-							<td><a href="boardDetail?btype=${btype}&bid=${vo.bid } ">
+							<td><a href="boardDetail.bo?btype=${btype}&bid=${vo.bid } ">
 									${vo.btitle }</a></td>
 							<td>${vo.bregdate }</td>
 						</tr>

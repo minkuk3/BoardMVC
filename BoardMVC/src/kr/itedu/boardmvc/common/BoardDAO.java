@@ -57,7 +57,7 @@ public class BoardDAO {
 
 		} catch (SQLException e) {
 			// TODO: 예외처리
-			System.out.println("fuck");
+			
 			e.printStackTrace();
 
 		}  catch (Exception e) {
@@ -71,9 +71,52 @@ public class BoardDAO {
 		return result;
 	}
 
-	private PreparedStatement prepareStatement(String query) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<BoardVO> getBoardDetail(int btype , int bid) {
+		ArrayList<BoardVO> result = new ArrayList<BoardVO>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = getConn();
+			String query = String.format(" SELECT BID, BTITLE, BCONTENT, "+
+			" to_char(bregdate, 'YYYY-MM-DD hh24:mi') as bregdate "+
+			" from t_board%d where bid = ? ", btype);
+			
+			ps = con.prepareStatement(query);
+			ps.setInt(1, bid);
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				bid = rs.getInt("bid");
+				String btitle = rs.getString("btitle");
+				String bcontent = rs.getString("bcontent");
+				String bregdate = rs.getString("bregdate");
+				
+				BoardVO model = new BoardVO();
+				model.setBid(bid);
+				model.setBtitle(btitle);
+				model.setBcontent(bcontent);
+				model.setBregdate(bregdate);
+				
+				result.add(model);
+			}
+			
+
+		} catch (SQLException e) {
+			// TODO: 예외처리
+			System.out.println("fuck");
+			e.printStackTrace();
+
+		}  catch (Exception e) {
+			// TODO: Exception 마지막으로 에러 잡는 곳
+			e.printStackTrace();
+
+		}finally {
+			close(con, null, null);
+		}
+
+		return result;
 	}
 
 }

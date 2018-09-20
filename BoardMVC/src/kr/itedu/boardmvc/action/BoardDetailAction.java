@@ -21,12 +21,14 @@ public class BoardDetailAction implements Action {
 		// DB를 가져오는 문장 거시기
 		BoardDetailService service = new BoardDetailService();
 		int btype = Utils.getParamInt(request.getParameter("btype"));
-		ArrayList<BoardVO> data = service.getBoardList(btype, bid);
+		int bid =Integer.parseInt( request.getParameter("bid"));
+		
+		ArrayList<BoardVO> data = service.getBoardDetail(btype, bid);
 
 		// 템플릿 쓸것
-		request.setAttribute("title", Var.TITLES[btype]); // 헤더 부분 제목
-		request.setAttribute("content", "boardList"); // 콘텐츠 jsp파일명
-		request.setAttribute("cssName", "boardlist"); // css 이름
+		request.setAttribute("title", Var.TITLES[btype]+" 글보기" ); // 헤더 부분 제목
+		request.setAttribute("content", "boarddetail"); // 콘텐츠 jsp파일명
+		request.setAttribute("cssName", "boarddetail"); // css 이름
 		request.setAttribute("btype", btype);
 		request.setAttribute("data", data);
 		request.setAttribute("data_size", data.size()); // 리스트 사이즈 확인 오류잡는것
