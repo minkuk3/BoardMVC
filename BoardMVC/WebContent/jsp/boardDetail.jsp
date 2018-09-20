@@ -20,7 +20,7 @@
 		</tr>
 	</c:forEach>
 	</table>
-	<input type="button" value="목록" onclick="location.href='boardList?btype=${param.btype}'">
-	<input type="button" value="수정" onclick="location.href='boardwrite?btype=${param.btype}&bid=${param.bid}'">
-	<input type="button" value="삭제" onclick="location.href='boarddelete?btype=${param.btype}&bid=${param.bid}'">
+	<input type="button" value="목록" onclick="location.href='boardList.bo?btype=${param.btype}'">
+	<input type="button" value="수정" onclick="location.href='boardWrite.bo?btype=${param.btype}&bid=${param.bid}'">
+	<input type="button" value="삭제" onclick="location.href='boardDelete.bo?btype=${param.btype}&bid=${param.bid}'">
 </div>

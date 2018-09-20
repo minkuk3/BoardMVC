@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import kr.itedu.boardmvc.action.Action;
 import kr.itedu.boardmvc.action.BoardDetailAction;
 import kr.itedu.boardmvc.action.BoardListAction;
+import kr.itedu.boardmvc.action.BoardWriteAction;
+import kr.itedu.boardmvc.action.boardDeleteAction;
+import kr.itedu.boardmvc.action.writeSubmitAction;
 
 @WebServlet("*.bo")
 public class BoardFrontController extends HttpServlet {
@@ -43,6 +46,30 @@ public class BoardFrontController extends HttpServlet {
 
 		} else if (comd.equals("/boardDetail.bo")) {
 			action = (Action) new BoardDetailAction();
+			try {
+				forward = action.execute(request, response); // 어디로 갈것인가?
+			} catch (Exception e) {
+				// TODO: 예외처리
+				e.printStackTrace();
+			}
+		} else if (comd.equals("/boardWrite.bo")) {
+			action = (Action) new BoardWriteAction();
+			try {
+				forward = action.execute(request, response); // 어디로 갈것인가?
+			} catch (Exception e) {
+				// TODO: 예외처리
+				e.printStackTrace();
+			}
+		} else if (comd.equals("/writeSubmit.bo")) {
+			action = (Action) new writeSubmitAction();
+			try {
+				forward = action.execute(request, response); // 어디로 갈것인가?
+			} catch (Exception e) {
+				// TODO: 예외처리
+				e.printStackTrace();
+			}
+		} else if (comd.equals("/boardDelete.bo")) {
+			action = (Action) new boardDeleteAction();
 			try {
 				forward = action.execute(request, response); // 어디로 갈것인가?
 			} catch (Exception e) {
