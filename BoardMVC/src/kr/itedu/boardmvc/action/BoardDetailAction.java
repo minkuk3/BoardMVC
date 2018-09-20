@@ -27,7 +27,7 @@ public class BoardDetailAction implements Action {
 
 		// 템플릿 쓸것
 		request.setAttribute("title", Var.TITLES[btype]+" 글보기" ); // 헤더 부분 제목
-		request.setAttribute("content", "boarddetail"); // 콘텐츠 jsp파일명
+		request.setAttribute("content", "boardDetail"); // 콘텐츠 jsp파일명
 		request.setAttribute("cssName", "boarddetail"); // css 이름
 		request.setAttribute("btype", btype);
 		request.setAttribute("data", data);
