@@ -27,16 +27,22 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			
-			<div>
-			 내용
-			</div>
+
+			<c:forEach var="i" begin="1" end="${count}" step="1">
+				<div style="float: left; display: inline-block;">
+					<a href="boardList.bo?btype=${btype}&page=${i}">${i}</a>
+				</div>
+			</c:forEach>
+
+
 		</c:when>
+
 		<c:otherwise>
 			게시글이 없습니다.
 		</c:otherwise>
 	</c:choose>
 	<div class="listInput">
-	<input type="submit" value="글쓰기" onclick="location.href='boardWrite.bo?btype=${btype}&bid=0'">
+		<input type="submit" value="글쓰기"
+			onclick="location.href='boardWrite.bo?btype=${btype}&bid=0'">
 	</div>
 </div>

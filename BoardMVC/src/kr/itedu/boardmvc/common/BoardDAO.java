@@ -122,8 +122,7 @@ public class BoardDAO {
 		PreparedStatement ps = null;
 		try {
 			con = getConn();
-			String query = String.format(" insert into t_board%d "
-					+ " (bid, btitle, bcontent) values "
+			String query = String.format(" insert into t_board%d " + " (bid, btitle, bcontent) values "
 					+ " ((select nvl(max(bid),0)+1 from t_board%d) ,? , ?) ", vo.getBtype(), vo.getBtype());
 
 			ps = con.prepareStatement(query);
@@ -144,15 +143,13 @@ public class BoardDAO {
 	}
 
 	public void BoardUpdate(BoardVO vo) {
-		
+
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
 			con = getConn();
-			String query = String.format(" update t_board%d "
-					+ " set btitle = ? , bcontent = ? "
-					+ " where bid = ? "
-					+ "", vo.getBtype());
+			String query = String.format(
+					" update t_board%d " + " set btitle = ? , bcontent = ? " + " where bid = ? " + "", vo.getBtype());
 
 			ps = con.prepareStatement(query);
 			ps.setString(1, vo.getBtitle());
@@ -169,7 +166,7 @@ public class BoardDAO {
 		} finally {
 			close(con, ps, null);
 		}
-		
+
 	}
 
 	public void BoardDelete(int bid, int btype) {
@@ -177,8 +174,7 @@ public class BoardDAO {
 		PreparedStatement ps = null;
 		try {
 			con = getConn();
-			String query = String.format(" delete from t_board%d "
-					+ " where bid = ? ", btype);
+			String query = String.format(" delete from t_board%d " + " where bid = ? ", btype);
 
 			ps = con.prepareStatement(query);
 			ps.setInt(1, bid);
@@ -193,7 +189,83 @@ public class BoardDAO {
 		} finally {
 			close(con, ps, null);
 		}
-		
+
 	}
+
+	public int BoardCount(int btype) {
+		
+		int count = 0;
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = getConn();
+			String query = 
+					" select count(bid) as count from t_board"+ btype;
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				count = rs.getInt("count");
+			}
+			
+		} catch (SQLException e) {
+			// TODO: 예외처리
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: Exception 마지막으로 에러 잡는 곳
+			e.printStackTrace();
+		} finally {
+			close(con, ps, rs);
+		}
+		return count;
+
+	}
+	
+	public ArrayList<BoardVO> getPaging(int btype, int page) {
+		ArrayList<BoardVO> result = new ArrayList<BoardVO>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = getConn();
+			String query = String.format(" select * from (select rownum as rnum, z.* from "
+					+ " (select * from t_board%d order by bid desc) z where rownum <= %d) where rnum >= %d ",
+					btype, page * 10, ((page - 1) * 10) + 1);
+
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int bid = rs.getInt("bid");
+				String btitle = rs.getString("btitle");
+				String bcontent = rs.getString("bcontent");
+				String bregdate = rs.getString("bregdate");
+
+				BoardVO model = new BoardVO();
+				model.setBid(bid);
+				model.setBtitle(btitle);
+				model.setBcontent(bcontent);
+				model.setBregdate(bregdate);
+
+				result.add(model);
+			}
+
+		} catch (SQLException e) {
+			// TODO: 예외처리
+
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			// TODO: Exception 마지막으로 에러 잡는 곳
+			e.printStackTrace();
+
+		} finally {
+			close(con, ps, rs);
+		}
+
+		return result;
+	}
+	
 
 }
