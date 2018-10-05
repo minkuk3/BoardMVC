@@ -13,6 +13,7 @@ import kr.itedu.boardmvc.action.Action;
 import kr.itedu.boardmvc.action.BoardDetailAction;
 import kr.itedu.boardmvc.action.BoardListAction;
 import kr.itedu.boardmvc.action.BoardWriteAction;
+import kr.itedu.boardmvc.action.boardCommentAction;
 import kr.itedu.boardmvc.action.boardDeleteAction;
 import kr.itedu.boardmvc.action.writeSubmitAction;
 
@@ -70,6 +71,14 @@ public class BoardFrontController extends HttpServlet {
 			}
 		} else if (comd.equals("/boardDelete.bo")) {
 			action = (Action) new boardDeleteAction();
+			try {
+				forward = action.execute(request, response); // 어디로 갈것인가?
+			} catch (Exception e) {
+				// TODO: 예외처리
+				e.printStackTrace();
+			}
+		} else if (comd.equals("/boardComment.bo")) {
+			action = (Action) new boardCommentAction();
 			try {
 				forward = action.execute(request, response); // 어디로 갈것인가?
 			} catch (Exception e) {

@@ -27,12 +27,12 @@
 					</c:forEach>
 				</tbody>
 			</table>
-
+			
+			<div>
 			<c:forEach var="i" begin="1" end="${count}" step="1">
-				<div style="float: left; display: inline-block;">
 					<a href="boardList.bo?btype=${btype}&page=${i}">${i}</a>
-				</div>
 			</c:forEach>
+			</div>
 
 
 		</c:when>

@@ -24,7 +24,9 @@ public class BoardDetailAction implements Action {
 		int bid =Integer.parseInt( request.getParameter("bid"));
 		
 		ArrayList<BoardVO> data = service.getBoardDetail(btype, bid);
-
+		
+		ArrayList<CommentVO> commentData = service.getBoardComment(btype, bid );
+		
 		// 템플릿 쓸것
 		request.setAttribute("title", Var.TITLES[btype]+" 글보기" ); // 헤더 부분 제목
 		request.setAttribute("content", "boardDetail"); // 콘텐츠 jsp파일명
@@ -32,6 +34,8 @@ public class BoardDetailAction implements Action {
 		request.setAttribute("btype", btype);
 		request.setAttribute("data", data);
 		request.setAttribute("data_size", data.size()); // 리스트 사이즈 확인 오류잡는것
+		
+		request.setAttribute("commentData", commentData);
 		
 		return forward;
 	}

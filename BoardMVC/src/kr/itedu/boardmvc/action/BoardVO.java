@@ -40,8 +40,4 @@ public class BoardVO {
 	public void setBtype(int btype) {
 		this.btype = btype;
 	}
-	
-	
-	
-	
 }

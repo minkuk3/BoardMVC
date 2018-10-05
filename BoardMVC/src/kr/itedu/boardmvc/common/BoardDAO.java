@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import kr.itedu.boardmvc.action.BoardVO;
+import kr.itedu.boardmvc.action.CommentVO;
 
 //Query문
 public class BoardDAO {
@@ -193,22 +194,21 @@ public class BoardDAO {
 	}
 
 	public int BoardCount(int btype) {
-		
+
 		int count = 0;
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			con = getConn();
-			String query = 
-					" select count(bid) as count from t_board"+ btype;
+			String query = " select count(bid) as count from t_board" + btype;
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				count = rs.getInt("count");
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO: 예외처리
 			e.printStackTrace();
@@ -221,7 +221,7 @@ public class BoardDAO {
 		return count;
 
 	}
-	
+
 	public ArrayList<BoardVO> getPaging(int btype, int page) {
 		ArrayList<BoardVO> result = new ArrayList<BoardVO>();
 		Connection con = null;
@@ -229,8 +229,9 @@ public class BoardDAO {
 		ResultSet rs = null;
 		try {
 			con = getConn();
-			String query = String.format(" select * from (select rownum as rnum, z.* from "
-					+ " (select * from t_board%d order by bid desc) z where rownum <= %d) where rnum >= %d ",
+			String query = String.format(
+					" select * from (select rownum as rnum, z.* from "
+							+ " (select * from t_board%d order by bid desc) z where rownum <= %d) where rnum >= %d ",
 					btype, page * 10, ((page - 1) * 10) + 1);
 
 			ps = con.prepareStatement(query);
@@ -266,6 +267,81 @@ public class BoardDAO {
 
 		return result;
 	}
-	
+
+	public void BoardComment(int bid, int btype, String t_comment) {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = getConn();
+			String query = " INSERT INTO t_comment " + " (cid, bid, btype, t_comment) " + " values "
+					+ " ((select nvl(max(cid),0)+1 from t_comment) ,? ,? ,?) ";
+
+			ps = con.prepareStatement(query);
+			ps.setInt(1, bid);
+			ps.setInt(2, btype);
+			ps.setString(3, t_comment);
+			ps.executeQuery();
+
+		} catch (SQLException e) {
+			// TODO: 예외처리
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: Exception 마지막으로 에러 잡는 곳
+			e.printStackTrace();
+		} finally {
+			close(con, ps, null);
+		}
+
+	}
+
+	public ArrayList<CommentVO> getBoardComment(int btype, int bid) {
+		ArrayList<CommentVO> result = new ArrayList<CommentVO>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = getConn();
+			String query = " SELECT " + 
+					" CID,BTYPE,BID,T_COMMENT,CREGDATE " + 
+					" FROM t_comment where bid = ? and BTYPE = ? ";
+				
+			ps = con.prepareStatement(query);
+			ps.setInt(1, bid);
+			ps.setInt(2, btype);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int cid = rs.getInt("cid");
+				bid = rs.getInt("bid");
+				btype = rs.getInt("btype");
+				String t_comment = rs.getString("t_comment");
+				String cregdate = rs.getString("cregdate");
+			
+				CommentVO model = new CommentVO();
+				model.setCid(cid);
+				model.setBid(bid);
+				model.setBtype(btype);
+				model.setT_comment(t_comment);
+				model.setCregdate(cregdate);
+
+				result.add(model);
+			}
+
+		} catch (SQLException e) {
+			// TODO: 예외처리
+
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			// TODO: Exception 마지막으로 에러 잡는 곳
+			e.printStackTrace();
+
+		} finally {
+			close(con, ps, rs);
+		}
+
+		return result;
+	}
 
 }
